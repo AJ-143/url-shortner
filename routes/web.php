@@ -23,5 +23,4 @@ Route::post('/user/login', [AuthController::class, 'authenticate' ])->name('user
 
 Route::get('generate-shorten-link', [ShortUrlsController::class, 'index'])->name('generate.url');  
 Route::post('generate-shorten-link',  [ShortUrlsController::class, 'store'])->name('generate.shorten.link.post');  
-     
 Route::get('{url}',  [ShortUrlsController::class, 'shortenLink'])->name('shorten.link');  
