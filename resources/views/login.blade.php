@@ -24,10 +24,10 @@
   <div class="card">
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-
-      <form action="../../index3.html" method="post">
+      <form method="POST" id="loginForm">
+        @csrf
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" name="email" id="email" placeholder="Email" required @error('email') is-invalid @enderror>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" id="password" placeholder="Password" required @error('password') is-invalid @enderror>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -70,9 +70,6 @@
       </div>
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
       <p class="mb-0">
         <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
       </p>
@@ -90,3 +87,34 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+$('#loginForm').on('submit',function(e){
+  e.preventDefault();
+
+  let email = $('#email').val();
+  let password = $('#password').val();
+
+  $.ajax({
+    url: "{{ route('user.login') }}",
+    type:"POST",
+    data:{
+      "_token": "{{ csrf_token() }}",
+      email:email,
+      password:password
+    },
+    success:function(response){
+      if (response.status == true) {
+        $('#msg-error').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">`+response.message+`</div>  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`);
+        window.location.href = "{{ route('dashboard') }}";
+      }else{
+        $('#msg-error').append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">`+response.message+`  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`); 
+      }
+    }
+    });
+  });
+});
+</script>

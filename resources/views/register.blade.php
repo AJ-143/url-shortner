@@ -18,17 +18,17 @@
 <body class="hold-transition register-page">
 <div class="register-box">
   <div class="register-logo">
-    <a href="../../index2.html"><b>Admin</b>LTE</a>
+    <a href="{{ route('login') }}"><b>Admin</b>LTE</a>
   </div>
 
   <div class="card">
     <div class="card-body register-card-body">
       <p class="login-box-msg">Register a new membership</p>
-
-      <form action="{{ route('user.register') }}" method="POST">
+      <div id="msg-error"></div> 
+      <form method="POST" id="registerForm">
         @csrf
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Full name">
+          <input type="text" class="form-control" placeholder="Full name" name="name" id="name">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
+          <input type="email" class="form-control" placeholder="Email" name="email" id="email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -44,7 +44,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Password">
+          <input type="password" class="form-control" placeholder="Password" name="password" id="password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -52,7 +52,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Retype password">
+          <input type="password" class="form-control" placeholder="Retype password" name="cpassword" id="cpassword">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -103,3 +103,38 @@
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<script type="text/javascript">
+
+$(document).ready(function(){
+$('#registerForm').on('submit',function(e){
+  e.preventDefault();
+
+  let name = $('#name').val();
+  let email = $('#email').val();
+  let password = $('#password').val();
+  let cpassword = $('#cpassword').val();
+
+  $.ajax({
+    url: "{{ route('user.register') }}",
+    type:"POST",
+    data:{
+      "_token": "{{ csrf_token() }}",
+      name:name,
+      email:email,
+      password:password,
+      cpassword:cpassword
+    },
+    success:function(response){
+      if (response.status == true) {
+        $('#msg-error').append(`<div class="alert alert-success alert-dismissible fade show" role="alert">`+response.message+`</div>  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>`);
+        window.location.href = "{{ route('login') }}";
+      }else{
+        $('#msg-error').append(`<div class="alert alert-danger alert-dismissible fade show" role="alert">`+response.message+`  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>`); 
+      }
+    }
+    });
+  });
+});
+</script>

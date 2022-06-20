@@ -6,10 +6,13 @@
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="{{ route('dashboard') }}" class="nav-link">Home</a>
+        <a href="{{ route('dashboard') }}" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i> Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="{{ route('user.logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('frm-logout').submit();"><i class="fas fa-users"></i> Sign Out</a>
+        <form id="frm-logout" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+          {{ csrf_field() }}
+      </form>
       </li>
     </ul>
 
