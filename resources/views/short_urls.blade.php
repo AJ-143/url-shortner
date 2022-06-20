@@ -54,8 +54,8 @@
                       <tr>
                         <th>Action</th>  
                         <th>Title</th> 
-                        <th>Short Link</th>  
-                        <th>Link</th>  
+                        <th>Short URL</th>  
+                        <th>URL</th>  
                         <th>Created At</th>  
                       </tr>
                     </thead>
